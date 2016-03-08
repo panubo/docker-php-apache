@@ -8,6 +8,8 @@
 FROM centos:7
 MAINTAINER Tim Robinson <tim@panubo.com>
 
+ENV VOLTGRID_PIE=1.0.4
+
 # Fix the timezone
 RUN cp -a /usr/share/zoneinfo/UTC /etc/localtime; \
   echo -e "ZONE=\"UTC\"\nUTC=True" > /etc/sysconfig/clock
@@ -36,7 +38,7 @@ RUN \
   sed -i 's/^error_log.*/error_log = \/dev\/stderr/' /etc/php-fpm.conf && \
   echo 'systemd_interval=0' >> /etc/php-fpm.conf
 
-RUN curl -L https://github.com/voltgrid/voltgrid-pie/archive/v1.0.2.tar.gz | tar -C /usr/local/bin --strip-components 1 -zxf - voltgrid-pie-1.0.2/voltgrid.py && \
+RUN curl -L https://github.com/voltgrid/voltgrid-pie/archive/v${VOLTGRID_PIE}.tar.gz | tar -C /usr/local/bin --strip-components 1 -zxf - voltgrid-pie-${VOLTGRID_PIE}/voltgrid.py && \
   curl -L https://github.com/just-containers/skaware/releases/download/v1.10.0/s6-2.1.3.0-linux-amd64-bin.tar.gz | tar -C / -zxf - && \
   pear install HTTP_Request2
 
