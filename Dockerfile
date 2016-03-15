@@ -8,7 +8,7 @@
 FROM centos:7
 MAINTAINER Tim Robinson <tim@panubo.com>
 
-ENV VOLTGRID_PIE=1.0.4
+ENV VOLTGRID_PIE=1.0.5
 
 # Fix the timezone
 RUN cp -a /usr/share/zoneinfo/UTC /etc/localtime; \
