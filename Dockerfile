@@ -42,6 +42,8 @@ RUN curl -L https://github.com/voltgrid/voltgrid-pie/archive/v${VOLTGRID_PIE}.ta
   curl -L https://github.com/just-containers/skaware/releases/download/v1.10.0/s6-2.1.3.0-linux-amd64-bin.tar.gz | tar -C / -zxf - && \
   pear install HTTP_Request2
 
+# ImageTragick CVE-2016-3714
+COPY policy.xml /etc/ImageMagick/policy.xml
 COPY conf.modules.d /etc/httpd/conf.modules.d
 COPY conf.d /etc/httpd/conf.d
 COPY php.d /etc/php.d
