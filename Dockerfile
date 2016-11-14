@@ -16,7 +16,7 @@ RUN cp -a /usr/share/zoneinfo/UTC /etc/localtime; \
 
 RUN \
   yum -q -y install epel-release && \
-  yum -q -y install tar httpd python-jinja2 git msmtp mod_xsendfile mod_security mod_security_crs php php-cli php-common php-dba php-fpm php-gd php-imap php-intl php-ldap php-mbstring php-mcrypt php-mysql php-pdo php-pear php-pecl-apcu php-pecl-igbinary php-pecl-imagick php-pecl-redis php-pspell php-recode php-suhosin php-xml php-xmlrpc php-pecl-memcached php-pecl-zendopcache php-soap ghostscript ImageMagick && \
+  yum -q -y install tar httpd python-jinja2 git msmtp mod_xsendfile mod_security mod_security_crs php php-cli php-common php-dba php-fpm php-gd php-imap php-intl php-ldap php-mbstring php-mcrypt php-mysql php-pdo php-pear php-pecl-apcu php-pecl-igbinary php-pecl-imagick php-pecl-redis php-pspell php-recode php-suhosin php-xml php-xmlrpc php-pecl-memcached php-pecl-zendopcache php-soap php-pecl-mongo ghostscript ImageMagick && \
   yum -q -y clean all
 
 EXPOSE 8000
