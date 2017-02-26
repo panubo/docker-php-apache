@@ -1,4 +1,4 @@
-## PHP-Apache-CentOS 7
+# PHP-Apache-CentOS 7
 
 This is an apache and php-fpm image
 Base: CentOS 7
@@ -7,7 +7,7 @@ PHP: 5.4
 
 This image is designed to be quite configurable and as such is good for getting
 started but probably not a great base if you want a highly optimised container.
-This image also expects to be used behind a load balancers and as such does not
+This image also expects to be used behind a load balancer and as such does not
 listen on port 80 but instead port 8000. Also make note of how to handle SSL
 offloading to the load balancer and how this affects .htaccess rules.
 
@@ -126,4 +126,4 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
 
 ## Notes
 
-Had to use tcp socket between php-fpm and httpd as httpd 2.4.6 does not have unix socket capability this was added in httpd 2.4.9
+Had to use tcp socket between php-fpm and httpd as httpd 2.4.6 does not have unix socket capability this was added in httpd 2.4.9.
