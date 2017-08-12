@@ -1,4 +1,4 @@
-# Panubo PHP Apache Container
+# Panubo PHP-Apache
 #
 # Debian 8
 # PHP 5.6
@@ -9,14 +9,16 @@
 FROM debian:8
 MAINTAINER Tim Robinson <tim@panubo.com>
 
-ENV TMPDIR=/var/tmp  TERM=dumb
+ENV S6_RELEASE=1.20.0 S6_VERSION=2.5.1.0 S6_SHA1=b798972cbf46e28f1c5d238f6703aba6edded57e
 ENV VOLTGRID_PIE=1.0.6 VOLTGRID_PIE_SHA1=11572a8ea15fb31cddeaa7e1438db61420556587
-ENV S6_RELEASE=1.19.1 S6_VERSION=2.4.0.0 S6_SHA1=c3caccc531029c4993b3b66027559b15d5a10874
 
-EXPOSE 8000
+# Change the www-data use to uid and gid 48 to match other containers
+RUN \
+  usermod -u 48 www-data && \
+  groupmod -g 48 www-data
 
 # Install main packages
-RUN export DEBIAN_FRONTEND=noninteractive && \
+RUN \
   apt-get update && \
   apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates git openssh-client msmtp-mta python-jinja2 apache2 apache2-mpm-event libapache2-mod-xsendfile imagemagick ghostscript php5-fpm php5-cli php5-curl php5-apcu php5-gd php5-imap php5-intl php5-ldap php5-mcrypt php5-mysql php5-pgsql php5-sqlite php5-redis php5-igbinary php5-imagick php5-pspell php5-recode php5-xmlrpc php5-memcached php-http-request2 && \
   echo 'deb http://repo.suhosin.org/ debian-jessie main' >> /etc/apt/sources.list && \
@@ -26,33 +28,28 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
   apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/www/html/*
 
 # Install php mongo extension
-RUN export DEBIAN_FRONTEND=noninteractive && \
+RUN \
   apt-get update && \
   apt-get install --no-install-recommends --no-install-suggests -y php5-dev re2c make && \
   pecl install mongo && \
   echo "extension = mongo.so" > /etc/php5/mods-available/mongo.ini && \
   apt-get --purge autoremove -y php5-dev re2c make && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Add Volt Grid .py / .conf
+RUN DIR=$(mktemp -d) && cd ${DIR} && \
+    curl -s -L https://github.com/voltgrid/voltgrid-pie/archive/v${VOLTGRID_PIE}.tar.gz -o voltgrid-pie.tar.gz && \
+    sha1sum voltgrid-pie.tar.gz && \
+    echo "${VOLTGRID_PIE_SHA1} voltgrid-pie.tar.gz" | sha1sum -c - && \
+    tar -C /usr/local/bin --strip-components 1 -zxf voltgrid-pie.tar.gz voltgrid-pie-${VOLTGRID_PIE}/voltgrid.py && \
+    rm -rf ${DIR} && \
+    echo '{"user":{"uid":0,"gid":0}}' > /usr/local/etc/voltgrid.conf
+
 # Install s6
 RUN DIR=$(mktemp -d) && cd ${DIR} && \
-  curl -s -L https://github.com/just-containers/skaware/releases/download/v${S6_RELEASE}/s6-${S6_VERSION}-linux-amd64-bin.tar.gz -o s6.tar.gz && \
-  echo "${S6_SHA1} s6.tar.gz" | sha1sum -c - && \
-  tar -xzf s6.tar.gz -C / && \
-  rm -rf ${DIR}
-
-# Install Voltgrid.py
-RUN DIR=$(mktemp -d) && cd ${DIR} && \
-  curl -s -L https://github.com/voltgrid/voltgrid-pie/archive/v${VOLTGRID_PIE}.tar.gz -o voltgrid-pie.tar.gz && \
-  sha1sum voltgrid-pie.tar.gz && \
-  echo "${VOLTGRID_PIE_SHA1} voltgrid-pie.tar.gz" | sha1sum -c - && \
-  tar -C /usr/local/bin --strip-components 1 -zxf voltgrid-pie.tar.gz voltgrid-pie-${VOLTGRID_PIE}/voltgrid.py && \
-  rm -rf ${DIR}  && \
-  echo '{"user":{"uid":0,"gid":0}}' > /usr/local/etc/voltgrid.conf
-
-# Change the www-data use to uid and gid 48 to match other containers
-RUN \
-  usermod -u 48 www-data && \
-  groupmod -g 48 www-data
+    curl -s -L https://github.com/just-containers/skaware/releases/download/v${S6_RELEASE}/s6-${S6_VERSION}-linux-amd64-bin.tar.gz -o s6.tar.gz && \
+    echo "${S6_SHA1} s6.tar.gz" | sha1sum -c - && \
+    tar -xzf s6.tar.gz -C /usr/local/ && \
+    rm -rf ${DIR}
 
 # Configure
 RUN \
@@ -81,5 +78,7 @@ RUN \
   a2enconf php5-fpm && \
   a2enmod proxy_fcgi remoteip rewrite headers
 
+ENV TMPDIR=/var/tmp TERM=dumb
+EXPOSE 8000
 ENTRYPOINT ["/usr/local/bin/voltgrid.py"]
-CMD ["/bin/s6-svscan","/etc/s6"]
+CMD ["/usr/local/bin/s6-svscan", "/etc/s6"]
