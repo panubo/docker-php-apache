@@ -1,4 +1,4 @@
-# Panubo
+# Panubo PHP-Apache
 #
 # Debian 8
 # PHP 5.6
@@ -45,8 +45,8 @@ RUN \
   sed -i -E 's/^;?systemd_interval.*/systemd_interval = 0/' /etc/php5/fpm/php-fpm.conf && \
   mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf_orig
 
- # Add Volt Grid .py / .conf
- RUN DIR=$(mktemp -d) && cd ${DIR} && \
+# Add Volt Grid .py / .conf
+RUN DIR=$(mktemp -d) && cd ${DIR} && \
     curl -s -L https://github.com/voltgrid/voltgrid-pie/archive/v${VOLTGRID_PIE}.tar.gz -o voltgrid-pie.tar.gz && \
     sha1sum voltgrid-pie.tar.gz && \
     echo "${VOLTGRID_PIE_SHA1} voltgrid-pie.tar.gz" | sha1sum -c - && \
@@ -54,12 +54,12 @@ RUN \
     rm -rf ${DIR} && \
     echo '{"user":{"uid":0,"gid":0}}' > /usr/local/etc/voltgrid.conf
 
- # Install s6
- RUN DIR=$(mktemp -d) && cd ${DIR} && \
-     curl -s -L https://github.com/just-containers/skaware/releases/download/v${S6_RELEASE}/s6-${S6_VERSION}-linux-amd64-bin.tar.gz -o s6.tar.gz && \
-     echo "${S6_SHA1} s6.tar.gz" | sha1sum -c - && \
-     tar -xzf s6.tar.gz -C / && \
-     rm -rf ${DIR}
+# Install s6
+RUN DIR=$(mktemp -d) && cd ${DIR} && \
+    curl -s -L https://github.com/just-containers/skaware/releases/download/v${S6_RELEASE}/s6-${S6_VERSION}-linux-amd64-bin.tar.gz -o s6.tar.gz && \
+    echo "${S6_SHA1} s6.tar.gz" | sha1sum -c - && \
+    tar -xzf s6.tar.gz -C / && \
+    rm -rf ${DIR}
 
 COPY apache2.conf /etc/apache2/conf-available/php5-fpm.conf
 COPY php.d /etc/php5/mods-available
