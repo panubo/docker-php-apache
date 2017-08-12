@@ -2,7 +2,7 @@
 
 These are Panubo's PHP-Apache Docker Containers. See the corresponding subdirectory for specific images.
 
-NB. Not all images are feature idential depending on the base OS used and the level of development in the image. 
+NB. Not all images are feature identical depending on the base OS used and the level of development in the image. 
 
 These images are available from the [Docker Hub](https://hub.docker.com/r/panubo/php-apache/).
 
@@ -15,4 +15,3 @@ These images are available from the [Docker Hub](https://hub.docker.com/r/panubo
 
 - [CentOS 7 PHP Development](/centos7)
 - [Debian 8 (Jessie) PHP Development](/debian8)
-
