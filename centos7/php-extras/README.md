@@ -7,4 +7,4 @@ we hope to make then more generic in the future. We welcome contributions.
 
 Set the following environment variable:
 
-`phpopts_auto_prepend_file=SSLHelper.php`
+`phpopts_auto_prepend_file=SSLHelper_prepend.php`
