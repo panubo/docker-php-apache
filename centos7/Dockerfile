@@ -18,13 +18,15 @@ RUN cp -a /usr/share/zoneinfo/UTC /etc/localtime; \
 RUN \
   yum -q -y install epel-release && \
   yum -q -y install tar httpd python-jinja2 git msmtp mod_xsendfile mod_security mod_security_crs php php-cli php-common php-dba php-fpm php-gd php-imap php-intl php-ldap php-mbstring php-mcrypt php-mysql php-pdo php-pear php-pecl-apcu php-pecl-igbinary php-pecl-imagick php-pecl-redis php-pspell php-recode php-suhosin php-xml php-xmlrpc php-pecl-memcached php-pecl-zendopcache php-soap php-pecl-mongo ghostscript ImageMagick && \
-  yum -q -y clean all
+  yum -q -y clean all && \
+  rm -rf /tmp/* /var/cache/yum/
 
 RUN \
   yum -q -y install php-devel gcc make && \
   pecl install apc && \
   yum -q -y history undo last && \
-  yum -q -y clean all
+  yum -q -y clean all && \
+  rm -rf /tmp/* /var/cache/yum/
 
 RUN \
   mkdir /root/.ssh && \
