@@ -30,10 +30,10 @@ RUN \
 # Install php mongo extension
 RUN \
   apt-get update && \
-  apt-get install --no-install-recommends --no-install-suggests -y php5-dev re2c make && \
+  apt-get install --no-install-recommends --no-install-suggests -y php5-dev re2c make pkg-config && \
   pecl install mongo && \
-  echo "extension = mongo.so" > /etc/php5/mods-available/mongo.ini && \
-  apt-get --purge autoremove -y php5-dev re2c make && apt-get clean && rm -rf /var/lib/apt/lists/*
+  echo "; priority=99\nextension = mongo.so" > /etc/php5/mods-available/mongo.ini && \
+  apt-get --purge autoremove -y php5-dev re2c make pkg-config && apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
 # Add Volt Grid .py / .conf
 RUN DIR=$(mktemp -d) && cd ${DIR} && \
