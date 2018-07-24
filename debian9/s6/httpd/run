@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Get apache httpd environment variables
+. /etc/apache2/envvars
+
+# Make run dir
+mkdir -p "${APACHE_RUN_DIR}"
+
+# Run apache httpd in foreground
+exec /usr/sbin/apache2 -DFOREGROUND

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Make run dir
+mkdir -p /run/php
+
+# Run php fpm in foreground
+exec /usr/sbin/php-fpm7.0 --nodaemonize --fpm-config /etc/php/7.0/fpm/php-fpm.conf
