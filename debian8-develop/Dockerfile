@@ -3,6 +3,7 @@
 # Debian 8
 # PHP 5.6
 # Apache 2.4
+# Suhosin
 # Mongo support
 #
 
@@ -69,7 +70,12 @@ COPY msmtprc /etc/msmtprc
 COPY php-fpm.conf /etc/php5/fpm/pool.d/www.conf
 COPY voltgrid.conf /usr/local/etc/voltgrid.conf
 COPY s6 /etc/s6/
-COPY php-extras /usr/share/php/
+
+# Install PHP Extras
+RUN cd /tmp \
+  && wget https://github.com/panubo/php-extras/archive/master.tar.gz \
+  && tar --wildcards -C /usr/share/php/ -xvf master.tar.gz --strip 1 '*.php'  \
+  && rm -f /tmp/master.tar.gz
 
 RUN \
   php5enmod suhosin session mongo && \

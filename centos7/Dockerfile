@@ -66,7 +66,12 @@ COPY msmtprc /etc/msmtprc
 COPY php-fpm.conf /etc/php-fpm.d/www.conf
 COPY voltgrid.conf /usr/local/etc/voltgrid.conf
 COPY s6 /etc/s6/
-COPY php-extras /usr/share/php/
+
+# Install PHP Extras
+RUN cd /tmp \
+  && wget https://github.com/panubo/php-extras/archive/master.tar.gz \
+  && tar --wildcards -C /usr/share/php/ -xvf master.tar.gz --strip 1 '*.php'  \
+  && rm -f /tmp/master.tar.gz
 
 ENV TMPDIR=/var/tmp TERM=dumb
 EXPOSE 8000
