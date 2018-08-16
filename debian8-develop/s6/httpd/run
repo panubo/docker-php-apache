@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# Get apache httpd environment variables
-. /etc/apache2/envvars
-
-# Run apache httpd in foreground
-exec /usr/sbin/apache2 -DFOREGROUND

@@ -14,7 +14,6 @@ These images are available from the [Docker Hub](https://hub.docker.com/r/panubo
 ## Development Images
 
 - [CentOS 7 PHP Development](/centos7)
-- [Debian 8 (Jessie) PHP Development](/debian8)
 
 ## Testing
 
