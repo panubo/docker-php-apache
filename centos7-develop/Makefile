@@ -7,5 +7,8 @@ help:
 bash: ## Runs bash in the container
 	docker run --rm -it $(NAME) bash
 
+run: ## Runs the container
+	docker run --rm -it $(NAME)
+
 build: ## Builds docker image
 	docker build -t $(NAME) .
