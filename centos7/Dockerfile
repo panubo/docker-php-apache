@@ -11,13 +11,14 @@ MAINTAINER Tim Robinson <tim@panubo.com>
 ENV S6_RELEASE=1.20.0 S6_VERSION=2.5.1.0 S6_SHA1=b798972cbf46e28f1c5d238f6703aba6edded57e
 ENV VOLTGRID_PIE=1.0.6 VOLTGRID_PIE_SHA1=11572a8ea15fb31cddeaa7e1438db61420556587
 
-# Fix the timezone
-RUN cp -a /usr/share/zoneinfo/UTC /etc/localtime; \
+# Fix the timezone to UTC
+RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime && \
   echo -e "ZONE=\"UTC\"\nUTC=True" > /etc/sysconfig/clock
 
 RUN \
   yum -q -y install epel-release && \
-  yum -q -y install tar httpd python-jinja2 git msmtp mod_xsendfile mod_security mod_security_crs php php-cli php-common php-dba php-fpm php-gd php-imap php-intl php-ldap php-mbstring php-mcrypt php-mysql php-pdo php-pear php-pecl-apcu php-pecl-igbinary php-pecl-imagick php-pecl-redis php-pspell php-recode php-suhosin php-xml php-xmlrpc php-pecl-memcached php-pecl-zendopcache php-soap php-pecl-mongo ghostscript ImageMagick && \
+  yum -q -y install git tar && \
+  yum -q -y install httpd python-jinja2 msmtp mod_xsendfile mod_security mod_security_crs php php-cli php-common php-dba php-fpm php-gd php-imap php-intl php-ldap php-mbstring php-mcrypt php-mysql php-pdo php-pear php-pecl-apcu php-pecl-igbinary php-pecl-imagick php-pecl-redis php-pspell php-recode php-suhosin php-xml php-xmlrpc php-pecl-memcached php-pecl-zendopcache php-soap php-pecl-mongo ghostscript ImageMagick && \
   yum -q -y clean all && \
   rm -rf /tmp/* /var/cache/yum/
 
@@ -69,7 +70,7 @@ COPY s6 /etc/s6/
 
 # Install PHP Extras
 RUN cd /tmp \
-  && wget https://github.com/panubo/php-extras/archive/master.tar.gz \
+  && curl -s -L https://github.com/panubo/php-extras/archive/master.tar.gz -o master.tar.gz \
   && tar --wildcards -C /usr/share/php/ -xvf master.tar.gz --strip 1 '*.php'  \
   && rm -f /tmp/master.tar.gz
 
