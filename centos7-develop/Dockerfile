@@ -9,7 +9,7 @@ FROM centos:7
 MAINTAINER Tim Robinson <tim@panubo.com>
 
 ENV S6_RELEASE=1.20.0 S6_VERSION=2.5.1.0 S6_SHA1=b798972cbf46e28f1c5d238f6703aba6edded57e
-ENV VOLTGRID_PIE=1.0.6 VOLTGRID_PIE_SHA1=11572a8ea15fb31cddeaa7e1438db61420556587
+ENV VOLTGRID_PIE=1.0.7 VOLTGRID_PIE_SHA1=c5644483053c23d0fe32e2c84e9836154d1a135b
 
 # Fix the timezone to UTC
 RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime && \
