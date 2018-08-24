@@ -10,7 +10,7 @@ FROM debian:9
 MAINTAINER Tim Robinson <tim@panubo.com>
 
 ENV S6_RELEASE=1.20.0 S6_VERSION=2.5.1.0 S6_SHA1=b798972cbf46e28f1c5d238f6703aba6edded57e
-ENV VOLTGRID_PIE=1.0.7 VOLTGRID_PIE_SHA1=c5644483053c23d0fe32e2c84e9836154d1a135b
+ENV VOLTGRID_PIE=1.0.8 VOLTGRID_PIE_SHA1=c25926d4ac22ed7963f23463334bfac8e2d5e85f
 
 # Change the www-data use to uid and gid 48 to match other containers
 RUN \
