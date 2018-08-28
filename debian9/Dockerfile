@@ -67,7 +67,7 @@ RUN cd /tmp \
 RUN \
   phpenmod session mongodb && \
   a2dissite 000-default && \
-  a2disconf security && \
+  a2disconf security other-vhosts-access-log && \
   a2enconf php7.0-fpm && \
   a2enmod proxy_fcgi remoteip rewrite headers
 

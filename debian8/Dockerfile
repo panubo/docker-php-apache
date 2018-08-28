@@ -80,7 +80,7 @@ RUN cd /tmp \
 RUN \
   php5enmod suhosin session mongo && \
   a2dissite 000-default && \
-  a2disconf security && \
+  a2disconf security other-vhosts-access-log && \
   a2enconf php5-fpm && \
   a2enmod proxy_fcgi remoteip rewrite headers
 
