@@ -5,7 +5,7 @@ SUBDIRS := centos7 centos7-develop debian8 debian9
 build:
 	for dir in $(SUBDIRS); do \
 		make TAG=$$dir -C $$dir $(MAKECMDGOALS); \
-  done
+	done
 
 push:
 	for dir in $(SUBDIRS); do \
