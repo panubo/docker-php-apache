@@ -10,8 +10,10 @@ help:
 build: ## Builds docker image
 	docker build --pull -t $(IMAGE_NAME):$(TAG) .
 
-push: ## Push image to registry
+push: ## Pushes the docker image to hub.docker.com
+	docker tag $(IMAGE_NAME):$(TAG) docker.io/$(IMAGE_NAME):latest
 	docker push $(IMAGE_NAME):$(TAG)
+	docker push $(IMAGE_NAME):latest
 
 clean: ## Remove built image
 	docker rmi $(IMAGE_NAME):$(TAG)
