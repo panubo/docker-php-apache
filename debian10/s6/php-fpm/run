@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+PHP_RUN_PID='/run/php/php7.3-fpm.pid'
+
+# Make run dir
+mkdir -p "$(dirname ${PHP_RUN_PID})"
+
+# Cleanup stale pid on restart
+rm -f ${PHP_RUN_PID}
+
+# Run php fpm in foreground
+exec /usr/sbin/php-fpm7.3 --nodaemonize --fpm-config /etc/php/7.3/fpm/php-fpm.conf
