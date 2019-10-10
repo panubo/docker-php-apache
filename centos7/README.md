@@ -95,14 +95,14 @@ msmtp_pass = (unset)
 ## SSL Offloading
 
 This container should be used behind a load balancing reverse proxy and as such
-SSL should be offloaded to the load balancer. However this can cause issues
-when your applications what to know if they are being served over SSL as the
-local webserver can not tell. Bellow are workarounds for the two most common
+SSL should be offloaded to the load balancer. However, this can cause issues
+when your applications want to know if they are being served over SSL as the
+local webserver cannot determine this. Below are workarounds for the two most common
 issues.
 
-If you want to redirect used from a non-ssl connection to a ssl connection with
-htaccess and mod_rewrite the follow rules work both behind a ssl offloading
-load balancer and when the local webserver is doing the ssl.
+If you want to redirect users from a non-ssl connection to a SSL connection with
+htaccess and mod_rewrite the following rules work both behind an SSL offloading
+load balancer and also when the local webserver is handling the SSL.
 
 ```
 <IfModule mod_rewrite.c>

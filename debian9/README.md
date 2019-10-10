@@ -8,7 +8,7 @@ This is an Apache and php-fpm image:
 
 This image is designed to be quite configurable and as such is good for getting
 started but probably not a great base if you want a highly optimised container.
-This image also expects to be used behind a load balancers and as such does not
+This image also expects to be used behind a load balancer and as such does not
 listen on port 80 but instead port 8000. Also make note of how to handle SSL
 offloading to the load balancer and how this affects .htaccess rules.
 
@@ -72,18 +72,6 @@ phpfpm_pm_max_children = 3
 phpfpm_pm_max_requests = 500
 ```
 
-## Suhosin
-
-This container also provides support for [Suhosin](https://suhosin.org/)
-PHP security extensions.
-
-NB. When defining suhosin parameters replace all periods ('.') with double
-underscores ('__'). (This is due issues with defining environment variables
-that contain periods).
-
-eg. `phpopts_suhosin.get.max_value_length=2048` should be defined as
-`phpopts_suhosin__get__max_value_length=2048`
-
 ### Email/msmtp
 
 msmtp expects a from address to be set either via environment variable (`msmtp_from`) or
@@ -105,14 +93,14 @@ msmtp_pass = (unset)
 ## SSL Offloading
 
 This container should be used behind a load balancing reverse proxy and as such
-SSL should be offloaded to the load balancer. However this can cause issues
-when your applications what to know if they are being served over SSL as the
-local webserver can not tell. Bellow are workarounds for the two most common
+SSL should be offloaded to the load balancer. However, this can cause issues
+when your applications want to know if they are being served over SSL as the
+local webserver cannot determine this. Below are workarounds for the two most common
 issues.
 
-If you want to redirect used from a non-ssl connection to a ssl connection with
-htaccess and mod_rewrite the follow rules work both behind a ssl offloading
-load balancer and when the local webserver is doing the ssl.
+If you want to redirect users from a non-ssl connection to a SSL connection with
+htaccess and mod_rewrite the following rules work both behind an SSL offloading
+load balancer and also when the local webserver is handling the SSL.
 
 ```
 <IfModule mod_rewrite.c>
