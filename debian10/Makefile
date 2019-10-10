@@ -21,5 +21,5 @@ clean: ## Remove built image
 bash: ## Runs bash in the container
 	docker run --rm -it $(IMAGE_NAME):$(TAG) bash
 
-run: ## Runs the container
-	docker run --rm -it $(IMAGE_NAME):$(TAG)
+run: ## Runs the container with test data
+	docker run --rm -it -p 8000:8000 -v test:/srv/remote --name $(NAME) $(IMAGE_NAME):$(TAG)

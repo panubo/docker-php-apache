@@ -10,10 +10,8 @@ help:
 build: ## Builds docker image
 	docker build --pull -t $(IMAGE_NAME):$(TAG) .
 
-push: ## Pushes the docker image to hub.docker.com
-	docker tag $(IMAGE_NAME):$(TAG) docker.io/$(IMAGE_NAME):latest
+push: ## Push image to registry
 	docker push $(IMAGE_NAME):$(TAG)
-	docker push $(IMAGE_NAME):latest
 
 clean: ## Remove built image
 	docker rmi $(IMAGE_NAME):$(TAG)
@@ -21,5 +19,5 @@ clean: ## Remove built image
 bash: ## Runs bash in the container
 	docker run --rm -it $(IMAGE_NAME):$(TAG) bash
 
-run: ## Runs the container
-	docker run --rm -it $(IMAGE_NAME):$(TAG)
+run: ## Runs the container with test data
+	docker run --rm -it -p 8000:8000 -v test:/srv/remote --name $(NAME) $(IMAGE_NAME):$(TAG)
