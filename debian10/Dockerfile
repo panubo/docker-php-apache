@@ -1,13 +1,12 @@
 # Panubo PHP-Apache
 #
-# Debian 8
-# PHP 5.6
+# Debian 10
+# PHP 7.3
 # Apache 2.4
-# Suhosin
 # Mongo support
 #
 
-FROM debian:8
+FROM debian:10
 
 ENV S6_RELEASE=1.20.0 S6_VERSION=2.5.1.0 S6_SHA1=b798972cbf46e28f1c5d238f6703aba6edded57e
 ENV VOLTGRID_PIE=1.0.8 VOLTGRID_PIE_SHA1=c25926d4ac22ed7963f23463334bfac8e2d5e85f
@@ -20,20 +19,8 @@ RUN \
 # Install main packages
 RUN \
   apt-get update && \
-  apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates git openssh-client msmtp-mta python-jinja2 apache2 apache2-mpm-event libapache2-mod-xsendfile imagemagick ghostscript php5-fpm php5-cli php5-curl php5-apcu php5-gd php5-imap php5-intl php5-ldap php5-mcrypt php5-mysql php5-pgsql php5-sqlite php5-redis php5-igbinary php5-imagick php5-pspell php5-recode php5-xmlrpc php5-memcached php-http-request2 && \
-  echo 'deb http://repo.suhosin.org/ debian-jessie main' >> /etc/apt/sources.list && \
-  wget -O- https://sektioneins.de/files/repository.asc | apt-key add - && \
-  apt-get update && \
-  apt-get install --no-install-recommends --no-install-suggests -y php5-suhosin-extension && \
+  apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates git gnupg openssh-client msmtp-mta python-jinja2 apache2 libapache2-mod-xsendfile imagemagick ghostscript php7.3-fpm php7.3-cli php7.3-curl php7.3-apcu php7.3-gd php7.3-imap php7.3-intl php7.3-ldap php7.3-mysql php7.3-pgsql php7.3-sqlite php7.3-redis php7.3-igbinary php7.3-imagick php7.3-pspell php7.3-recode php7.3-xmlrpc php7.3-memcached php-mongodb && \
   apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/www/html/*
-
-# Install php mongo extension
-RUN \
-  apt-get update && \
-  apt-get install --no-install-recommends --no-install-suggests -y php5-dev re2c make pkg-config && \
-  pecl install mongo && \
-  echo "; priority=99\nextension = mongo.so" > /etc/php5/mods-available/mongo.ini && \
-  apt-get --purge autoremove -y php5-dev re2c make pkg-config && apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
 # Add Volt Grid .py / .conf
 RUN DIR=$(mktemp -d) && cd ${DIR} && \
@@ -55,18 +42,19 @@ RUN DIR=$(mktemp -d) && cd ${DIR} && \
 RUN \
   mkdir /root/.ssh && \
   echo "Host *\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config && \
-  sed -i -e '/^session.save_/ s/^/;/' /etc/php5/*/php.ini && \
+  sed -i -e '/^session.save_/ s/^/;/' /etc/php/7.3/*/php.ini && \
   touch /var/log/msmtp.log && \
   chown www-data:www-data /var/log/msmtp.log && \
   sed -i -r 's/^Listen.*/Listen 8000/g' /etc/apache2/ports.conf && \
-  sed -i 's/^error_log.*/error_log = \/dev\/stderr/' /etc/php5/fpm/php-fpm.conf && \
-  sed -i -E 's/^;?systemd_interval.*/systemd_interval = 0/' /etc/php5/fpm/php-fpm.conf && \
-  mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf_orig
+  sed -i 's/^error_log.*/error_log = \/dev\/stderr/' /etc/php/7.3/fpm/php-fpm.conf && \
+  sed -i -E 's/^;?systemd_interval.*/systemd_interval = 0/' /etc/php/7.3/fpm/php-fpm.conf && \
+  mv /etc/php/7.3/fpm/pool.d/www.conf /etc/php/7.3/fpm/pool.d/www.conf_orig && \
+  mkdir -p /var/log/php-fpm
 
-COPY apache2.conf /etc/apache2/conf-available/php5-fpm.conf
-COPY php.d /etc/php5/mods-available
+COPY php-fpm.conf /etc/apache2/conf-available/php7.3-fpm.conf
+COPY php.d /etc/php/7.3/mods-available
 COPY msmtprc /etc/msmtprc
-COPY php-fpm.conf /etc/php5/fpm/pool.d/www.conf
+COPY www.conf /etc/php/7.3/fpm/pool.d/www.conf
 COPY voltgrid.conf /usr/local/etc/voltgrid.conf
 COPY s6 /etc/s6/
 
@@ -77,10 +65,10 @@ RUN cd /tmp \
   && rm -f /tmp/master.tar.gz
 
 RUN \
-  php5enmod suhosin session mongo && \
+  phpenmod session mongodb && \
   a2dissite 000-default && \
   a2disconf security other-vhosts-access-log && \
-  a2enconf php5-fpm && \
+  a2enconf php7.3-fpm && \
   a2enmod proxy_fcgi remoteip rewrite headers
 
 ENV TMPDIR=/var/tmp TERM=dumb
