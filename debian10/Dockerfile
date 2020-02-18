@@ -19,7 +19,29 @@ RUN \
 # Install main packages
 RUN \
   apt-get update && \
-  apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates git gnupg openssh-client msmtp-mta python-jinja2 apache2 libapache2-mod-xsendfile imagemagick ghostscript php7.3-fpm php7.3-cli php7.3-curl php7.3-apcu php7.3-gd php7.3-imap php7.3-intl php7.3-ldap php7.3-mysql php7.3-pgsql php7.3-sqlite php7.3-redis php7.3-igbinary php7.3-imagick php7.3-pspell php7.3-recode php7.3-xmlrpc php7.3-memcached php-mongodb && \
+  apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates git gnupg openssh-client msmtp-mta python-jinja2 apache2 libapache2-mod-xsendfile imagemagick ghostscript \
+  php7.3-apcu \
+  php7.3-cli \
+  php7.3-curl \
+  php7.3-dom \
+  php7.3-fpm \
+  php7.3-gd \
+  php7.3-igbinary \
+  php7.3-imagick \
+  php7.3-imap \
+  php7.3-intl \
+  php7.3-ldap \
+  php7.3-mbstring \
+  php7.3-memcached \
+  php7.3-mongodb \
+  php7.3-mysql \
+  php7.3-pgsql \
+  php7.3-pspell \
+  php7.3-recode \
+  php7.3-redis \
+  php7.3-sqlite \
+  php7.3-xmlrpc \
+  php7.3-zip && \
   apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/www/html/*
 
 # Add Volt Grid .py / .conf
