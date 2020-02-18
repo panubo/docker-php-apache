@@ -43,6 +43,7 @@ RUN \
   mkdir /root/.ssh && \
   echo "Host *\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config && \
   sed -i -e '/^session.save_/ s/^/;/' /etc/php/7.3/*/php.ini && \
+  touch /etc/php/7.3/mods-available/auto.ini && \
   touch /var/log/msmtp.log && \
   chown www-data:www-data /var/log/msmtp.log && \
   sed -i -r 's/^Listen.*/Listen 8000/g' /etc/apache2/ports.conf && \
@@ -68,6 +69,7 @@ RUN \
   phpenmod session mongodb && \
   a2dissite 000-default && \
   a2disconf security other-vhosts-access-log && \
+  phpenmod auto && \
   a2enconf php7.3-fpm && \
   a2enmod proxy_fcgi remoteip rewrite headers
 
