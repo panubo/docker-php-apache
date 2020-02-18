@@ -90,6 +90,13 @@ msmtp_user = (unset)
 msmtp_pass = (unset)
 ```
 
+## PHP Pre Execution
+
+PHP pre-execution helpers are included in this image. See
+[PHP Extras](https://github.com/panubo/php-extras) for more information.
+
+Set `auto_prepend_file=xxxx_prepend.php` to enable.
+
 ## SSL Offloading
 
 This container should be used behind a load balancing reverse proxy and as such
@@ -121,3 +128,5 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
     $_SERVER['HTTPS'] = 'on';
 }
 ```
+
+or set `auto_prepend_file=SSLHelper_prepend.php` to use the SSL Helper from the [PHP Extras](https://github.com/panubo/php-extras) repo.
