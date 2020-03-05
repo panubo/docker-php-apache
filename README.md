@@ -1,6 +1,6 @@
 # Highly configurable PHP and Apache images
 
-These are Panubos PHP-Apache Docker images. See the corresponding subdirectory for specific Dockerfiles and documentation.
+These are Apache Docker images with PHP. See the corresponding subdirectory for specific Dockerfiles and documentation.
 
 NB. Images may not be feature identical depending on the base OS used and the level of development of the image.
 
@@ -19,3 +19,7 @@ These images are available from the [Docker Hub](https://hub.docker.com/r/panubo
 
 - [Debian 8 (Jessie) Base](/debian8) - For legacy PHP applications that require PHP 5.6
 - [CentOS 7 Base](/centos7) - For legacy PHP applications that require PHP 5.4
+
+# Status
+
+Stable.
