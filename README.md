@@ -12,6 +12,7 @@ These images are available from the [Docker Hub](https://hub.docker.com/r/panubo
 
 ## Development Images
 
+- [Debian Sid (unstable)](/sid)
 - [CentOS 7 PHP Development](/centos7)
 
 ## Legacy
