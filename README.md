@@ -18,7 +18,6 @@ These images are available from the [Docker Hub](https://hub.docker.com/r/panubo
 ## Legacy
 
 - [Debian 9 (Stretch) Base](/debian9) - For legacy PHP applications that support PHP 7.0
-- [Debian 8 (Jessie) Base](/debian8) - For legacy PHP applications that require PHP 5.6
 - [CentOS 7 Base](/centos7) - For legacy PHP applications that require PHP 5.4
 
 # Status
