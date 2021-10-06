@@ -18,6 +18,7 @@ RUN \
 
 # Install main packages
 RUN \
+  export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
   apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates git gnupg openssh-client msmtp-mta python-jinja2 apache2 libapache2-mod-xsendfile imagemagick ghostscript php7.0-fpm php7.0-cli php7.0-curl php7.0-apcu php7.0-gd php7.0-imap php7.0-intl php7.0-ldap php7.0-mcrypt php7.0-mongodb php7.0-mysql php7.0-pgsql php7.0-sqlite php7.0-redis php7.0-igbinary php7.0-imagick php7.0-pspell php7.0-recode php7.0-xmlrpc php7.0-memcached php-http-request2 && \
   apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/www/html/*
