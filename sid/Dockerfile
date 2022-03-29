@@ -1,7 +1,7 @@
 # Panubo PHP-Apache
 #
 # Debian Sid (Unstable)
-# PHP 7.4
+# PHP 8.1
 # Apache 2.4
 # Mongo support
 #
@@ -20,29 +20,33 @@ RUN \
 RUN \
   export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
-  apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates git gnupg openssh-client msmtp-mta python python-jinja2 apache2 libapache2-mod-xsendfile imagemagick ghostscript \
-  php7.4-apcu \
-  php7.4-cli \
-  php7.4-curl \
-  php7.4-dom \
-  php7.4-fpm \
-  php7.4-gd \
-  php7.4-igbinary \
-  php7.4-imagick \
-  php7.4-imap \
-  php7.4-intl \
-  php7.4-ldap \
-  php7.4-mbstring \
-  php7.4-memcached \
-  php7.4-mongodb \
-  php7.4-mysql \
-  php7.4-pgsql \
-  php7.4-pspell \
-  php7.4-redis \
-  php7.4-sqlite \
-  php7.4-xmlrpc \
-  php7.4-zip && \
+  apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates git gnupg openssh-client msmtp-mta apache2 libapache2-mod-xsendfile imagemagick ghostscript \
+  python2 python-pip \
+  php8.1-apcu \
+  php8.1-cli \
+  php8.1-curl \
+  php8.1-dom \
+  php8.1-fpm \
+  php8.1-gd \
+  php8.1-igbinary \
+  php8.1-imagick \
+  php8.1-imap \
+  php8.1-intl \
+  php8.1-ldap \
+  php8.1-mbstring \
+  php8.1-memcached \
+  php8.1-mongodb \
+  php8.1-mysql \
+  php8.1-pgsql \
+  php8.1-pspell \
+  php8.1-redis \
+  php8.1-sqlite \
+  php8.1-xmlrpc \
+  php8.1-zip && \
   apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/www/html/*
+
+# jinja2 for voltgrid-pie
+RUN pip2 --no-cache install jinja2 && ln -s /usr/bin/python2 /usr/bin/python
 
 # Add Volt Grid .py / .conf
 RUN DIR=$(mktemp -d) && cd ${DIR} && \
@@ -64,20 +68,20 @@ RUN DIR=$(mktemp -d) && cd ${DIR} && \
 RUN \
   mkdir /root/.ssh && \
   echo "Host *\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config && \
-  sed -i -e '/^session.save_/ s/^/;/' /etc/php/7.4/*/php.ini && \
-  touch /etc/php/7.4/mods-available/auto.ini && \
+  sed -i -e '/^session.save_/ s/^/;/' /etc/php/8.1/*/php.ini && \
+  touch /etc/php/8.1/mods-available/auto.ini && \
   touch /var/log/msmtp.log && \
   chown www-data:www-data /var/log/msmtp.log && \
   sed -i -r 's/^Listen.*/Listen 8000/g' /etc/apache2/ports.conf && \
-  sed -i 's/^error_log.*/error_log = \/dev\/stderr/' /etc/php/7.4/fpm/php-fpm.conf && \
-  sed -i -E 's/^;?systemd_interval.*/systemd_interval = 0/' /etc/php/7.4/fpm/php-fpm.conf && \
-  mv /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/www.conf_orig && \
+  sed -i 's/^error_log.*/error_log = \/dev\/stderr/' /etc/php/8.1/fpm/php-fpm.conf && \
+  sed -i -E 's/^;?systemd_interval.*/systemd_interval = 0/' /etc/php/8.1/fpm/php-fpm.conf && \
+  mv /etc/php/8.1/fpm/pool.d/www.conf /etc/php/8.1/fpm/pool.d/www.conf_orig && \
   mkdir -p /var/log/php-fpm
 
-COPY php-fpm.conf /etc/apache2/conf-available/php7.4-fpm.conf
-COPY php.d /etc/php/7.4/mods-available
+COPY php-fpm.conf /etc/apache2/conf-available/php8.1-fpm.conf
+COPY php.d /etc/php/8.1/mods-available
 COPY msmtprc /etc/msmtprc
-COPY www.conf /etc/php/7.4/fpm/pool.d/www.conf
+COPY www.conf /etc/php/8.1/fpm/pool.d/www.conf
 COPY voltgrid.conf /usr/local/etc/voltgrid.conf
 COPY s6 /etc/s6/
 
@@ -92,7 +96,7 @@ RUN \
   a2dissite 000-default && \
   a2disconf security other-vhosts-access-log && \
   phpenmod auto && \
-  a2enconf php7.4-fpm && \
+  a2enconf php8.1-fpm && \
   a2enmod proxy_fcgi remoteip rewrite headers
 
 ENV TMPDIR=/var/tmp TERM=dumb
