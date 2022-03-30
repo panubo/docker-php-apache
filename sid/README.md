@@ -2,9 +2,9 @@
 
 This is an Apache and php-fpm image:
 
-- Base: Debian 10 (Buster)
+- Base: Debian Sid (Unstable)
 - Apache httpd: 2.4
-- PHP: 7.4
+- PHP: 8.1
 
 This image is designed to be quite configurable and as such is good for getting
 started but probably not a great base if you want a highly optimised container.
