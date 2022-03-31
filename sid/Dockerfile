@@ -8,10 +8,12 @@
 
 FROM debian:sid
 
-ENV BASHCONTAINER_VERSION=0.7.2 BASHCONTAINER_SHA256=87c4b804f0323d8f0856cb4fbf2f7859174765eccc8b0ac2d99b767cecdcf5c6
-ENV GOMPLATE_VERSION=3.10.0 GOMPLATE_SHA256=603539aac4e09f98a8ca5b6e5da0c21213221206dc7175a5644255c7a22b936d
-ENV S6_RELEASE=2.0.7 S6_VERSION=2.11.0.0 S6_SHA256=fcf79204c1957016fc88b0ad7d98f150071483583552103d5822cbf56824cc87
-ENV PHPEXTRAS_VERSION=0.1.0 PHPEXTRAS_SHA256=515af5789d5180123acfac9b1090f46e07f355c8df51a34e27ada5f7da0495cc
+# Component Versions
+ENV \
+  BASHCONTAINER_VERSION=0.7.2 BASHCONTAINER_SHA256=87c4b804f0323d8f0856cb4fbf2f7859174765eccc8b0ac2d99b767cecdcf5c6 \
+  GOMPLATE_VERSION=3.10.0 GOMPLATE_SHA256=603539aac4e09f98a8ca5b6e5da0c21213221206dc7175a5644255c7a22b936d \
+  S6_RELEASE=2.0.7 S6_VERSION=2.11.0.0 S6_SHA256=fcf79204c1957016fc88b0ad7d98f150071483583552103d5822cbf56824cc87 \
+  PHPEXTRAS_VERSION=0.1.0 PHPEXTRAS_SHA256=515af5789d5180123acfac9b1090f46e07f355c8df51a34e27ada5f7da0495cc
 
 # Change the www-data use to uid and gid 48 to match other containers
 RUN \
@@ -124,15 +126,11 @@ RUN \
   mv /etc/php/8.1/fpm/pool.d/www.conf /etc/php/8.1/fpm/pool.d/www.conf_orig && \
   mkdir -p /var/log/php-fpm
 
-COPY php-fpm.conf /etc/apache2/conf-available/php8.1-fpm.conf
-COPY php.d /etc/php/8.1/mods-available
-COPY msmtprc /etc/msmtprc
-COPY www.conf /etc/php/8.1/fpm/pool.d/www.conf
-COPY s6 /etc/s6/
-COPY entry.sh /
-COPY Procfile /
-COPY Mountfile /
+# Copy configs and templates
+COPY etc /etc
+COPY root /
 
+# Enable modules / configs
 RUN \
   phpenmod session mongodb && \
   a2dissite 000-default && \
