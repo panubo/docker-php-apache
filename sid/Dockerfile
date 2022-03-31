@@ -47,7 +47,7 @@ RUN set -x \
   && apt-get install -y --no-install-recommends ca-certificates ${fetchDeps} \
   && wget -nv -O /tmp/gomplate_linux-amd64-slim -L https://github.com/hairyhenderson/gomplate/releases/download/v${GOMPLATE_VERSION}/gomplate_linux-amd64-slim \
   && echo "${GOMPLATE_SHA256}  gomplate_linux-amd64-slim" > /tmp/SHA256SUM \
-  && ( cd /tmp; sha256sum -c SHA256SUM; ) \
+  && ( cd /tmp; sha256sum -c SHA256SUM || ( echo "Expected $(sha256sum gomplate_linux-amd64-slim)"; exit 1; )) \
   && mv /tmp/gomplate_linux-amd64-slim /usr/local/bin/gomplate \
   && chmod +x /usr/local/bin/gomplate \
   && rm -rf /tmp/* \
