@@ -131,7 +131,7 @@ COPY www.conf /etc/php/8.1/fpm/pool.d/www.conf
 COPY s6 /etc/s6/
 COPY entry.sh /
 COPY Procfile /
-Copy Mountfile /
+COPY Mountfile /
 
 RUN \
   phpenmod session mongodb && \
