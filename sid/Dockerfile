@@ -8,20 +8,85 @@
 
 FROM debian:sid
 
-ENV S6_RELEASE=1.20.0 S6_VERSION=2.5.1.0 S6_SHA1=b798972cbf46e28f1c5d238f6703aba6edded57e
-ENV VOLTGRID_PIE=1.0.8 VOLTGRID_PIE_SHA1=c25926d4ac22ed7963f23463334bfac8e2d5e85f
+ENV BASHCONTAINER_VERSION=0.7.2 BASHCONTAINER_SHA256=87c4b804f0323d8f0856cb4fbf2f7859174765eccc8b0ac2d99b767cecdcf5c6
+ENV GOMPLATE_VERSION=3.10.0 GOMPLATE_SHA256=603539aac4e09f98a8ca5b6e5da0c21213221206dc7175a5644255c7a22b936d
+ENV S6_RELEASE=2.0.7 S6_VERSION=2.11.0.0 S6_SHA256=fcf79204c1957016fc88b0ad7d98f150071483583552103d5822cbf56824cc87
+ENV PHPEXTRAS_VERSION=0.1.0 PHPEXTRAS_SHA256=515af5789d5180123acfac9b1090f46e07f355c8df51a34e27ada5f7da0495cc
 
 # Change the www-data use to uid and gid 48 to match other containers
 RUN \
   usermod -u 48 www-data && \
   groupmod -g 48 www-data
 
+# Install bash-container functions
+RUN set -x \
+  && if ! command -v wget > /dev/null; then \
+      fetchDeps="${fetchDeps} wget"; \
+     fi \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends ca-certificates curl ${fetchDeps} \
+  && cd /tmp \
+  && wget -nv https://github.com/panubo/bash-container/releases/download/v${BASHCONTAINER_VERSION}/panubo-functions.tar.gz \
+  && echo "${BASHCONTAINER_SHA256}  panubo-functions.tar.gz" > /tmp/SHA256SUM \
+  && ( cd /tmp; sha256sum -c SHA256SUM || ( echo "Expected $(sha256sum panubo-functions.tar.gz)"; exit 1; )) \
+  && tar --no-same-owner -C / -zxf panubo-functions.tar.gz \
+  && rm -rf /tmp/* \
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false ${fetchDeps} \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  ;
+
+# Install gomplate
+RUN set -x \
+  && if ! command -v wget > /dev/null; then \
+      fetchDeps="${fetchDeps} wget"; \
+     fi \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends ca-certificates ${fetchDeps} \
+  && wget -nv -O /tmp/gomplate_linux-amd64-slim -L https://github.com/hairyhenderson/gomplate/releases/download/v${GOMPLATE_VERSION}/gomplate_linux-amd64-slim \
+  && echo "${GOMPLATE_SHA256}  gomplate_linux-amd64-slim" > /tmp/SHA256SUM \
+  && ( cd /tmp; sha256sum -c SHA256SUM; ) \
+  && mv /tmp/gomplate_linux-amd64-slim /usr/local/bin/gomplate \
+  && chmod +x /usr/local/bin/gomplate \
+  && rm -rf /tmp/* \
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false ${fetchDeps} \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  ;
+
+# Install s6
+RUN set -x \
+  && DIR=$(mktemp -d) && cd ${DIR} \
+  && curl -s -L https://github.com/just-containers/skaware/releases/download/v${S6_RELEASE}/s6-${S6_VERSION}-linux-amd64-bin.tar.gz -o s6.tar.gz \
+  && echo "${S6_SHA256}  s6.tar.gz" > SHA256SUM \
+  && ( sha256sum -c SHA256SUM || ( echo "Expected $(sha256sum s6.tar.gz)"; exit 1; )) \
+  && tar -xzf s6.tar.gz -C /usr/local/ \
+  && rm -rf ${DIR}
+
+# Install PHP Extras
+RUN set -x \
+  && if ! command -v wget > /dev/null; then \
+      fetchDeps="${fetchDeps} wget"; \
+     fi \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends ${fetchDeps} \
+  && cd /tmp \
+  && wget -nv https://github.com/panubo/php-extras/releases/download/v${PHPEXTRAS_VERSION}/php-extras.tar.gz \
+  && echo "${PHPEXTRAS_SHA256}  php-extras.tar.gz" > /tmp/SHA256SUM \
+  && ( cd /tmp; sha256sum -c SHA256SUM || ( echo "Expected $(sha256sum php-extras.tar.gz)"; exit 1; )) \
+  && mkdir -p /usr/share/php/ \
+  && tar --no-same-owner -C /usr/share/php/ -zxf php-extras.tar.gz \
+  && rm -rf /tmp/* \
+  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false ${fetchDeps} \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  ;
+
 # Install main packages
 RUN \
   export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
   apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates git gnupg openssh-client msmtp-mta apache2 libapache2-mod-xsendfile imagemagick ghostscript \
-  python2 python-pip \
   php8.1-apcu \
   php8.1-cli \
   php8.1-curl \
@@ -45,25 +110,6 @@ RUN \
   php8.1-zip && \
   apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/www/html/*
 
-# jinja2 for voltgrid-pie
-RUN pip2 --no-cache install jinja2 && ln -s /usr/bin/python2 /usr/bin/python
-
-# Add Volt Grid .py / .conf
-RUN DIR=$(mktemp -d) && cd ${DIR} && \
-    curl -s -L https://github.com/voltgrid/voltgrid-pie/archive/v${VOLTGRID_PIE}.tar.gz -o voltgrid-pie.tar.gz && \
-    sha1sum voltgrid-pie.tar.gz && \
-    echo "${VOLTGRID_PIE_SHA1} voltgrid-pie.tar.gz" | sha1sum -c - && \
-    tar -C /usr/local/bin --strip-components 1 -zxf voltgrid-pie.tar.gz voltgrid-pie-${VOLTGRID_PIE}/voltgrid.py && \
-    rm -rf ${DIR} && \
-    echo '{"user":{"uid":0,"gid":0}}' > /usr/local/etc/voltgrid.conf
-
-# Install s6
-RUN DIR=$(mktemp -d) && cd ${DIR} && \
-    curl -s -L https://github.com/just-containers/skaware/releases/download/v${S6_RELEASE}/s6-${S6_VERSION}-linux-amd64-bin.tar.gz -o s6.tar.gz && \
-    echo "${S6_SHA1} s6.tar.gz" | sha1sum -c - && \
-    tar -xzf s6.tar.gz -C /usr/local/ && \
-    rm -rf ${DIR}
-
 # Configure
 RUN \
   mkdir /root/.ssh && \
@@ -82,14 +128,10 @@ COPY php-fpm.conf /etc/apache2/conf-available/php8.1-fpm.conf
 COPY php.d /etc/php/8.1/mods-available
 COPY msmtprc /etc/msmtprc
 COPY www.conf /etc/php/8.1/fpm/pool.d/www.conf
-COPY voltgrid.conf /usr/local/etc/voltgrid.conf
 COPY s6 /etc/s6/
-
-# Install PHP Extras
-RUN cd /tmp \
-  && wget https://github.com/panubo/php-extras/archive/master.tar.gz \
-  && tar --wildcards -C /usr/share/php/ -xvf master.tar.gz --strip 1 '*.php'  \
-  && rm -f /tmp/master.tar.gz
+COPY entry.sh /
+COPY Procfile /
+COPY Mountfile /
 
 RUN \
   phpenmod session mongodb && \
@@ -101,5 +143,5 @@ RUN \
 
 ENV TMPDIR=/var/tmp TERM=dumb
 EXPOSE 8000
-ENTRYPOINT ["/usr/local/bin/voltgrid.py"]
-CMD ["/usr/local/bin/s6-svscan", "/etc/s6"]
+ENTRYPOINT ["/entry.sh"]
+CMD ["s6"]
