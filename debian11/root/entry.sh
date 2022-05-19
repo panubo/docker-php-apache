@@ -4,13 +4,13 @@ set -e
 
 source /panubo-functions.sh
 
-TEMPLATE_FILES[0]=/etc/php/7.4/mods-available/apcu.ini
-TEMPLATE_FILES[1]=/etc/php/7.4/mods-available/auto.ini
-TEMPLATE_FILES[2]=/etc/php/7.4/mods-available/opcache.ini
-TEMPLATE_FILES[3]=/etc/php/7.4/mods-available/session.ini
-TEMPLATE_FILES[4]=/etc/apache2/conf-available/php7.4-fpm.conf
-TEMPLATE_FILES[5]=/etc/php/7.4/fpm/pool.d/www.conf
-TEMPLATE_FILES[6]=/etc/msmtprc
+TEMPLATE_FILES[0]=/etc/php/7.4/mods-available/apcu.ini.tmpl
+TEMPLATE_FILES[1]=/etc/php/7.4/mods-available/auto.ini.tmpl
+TEMPLATE_FILES[2]=/etc/php/7.4/mods-available/opcache.ini.tmpl
+TEMPLATE_FILES[3]=/etc/php/7.4/mods-available/session.ini.tmpl
+TEMPLATE_FILES[4]=/etc/apache2/conf-available/php7.4-fpm.conf.tmpl
+TEMPLATE_FILES[5]=/etc/php/7.4/fpm/pool.d/www.conf.tmpl
+TEMPLATE_FILES[6]=/etc/msmtprc.tmpl
 
 # Mount data mounts (specifying an alternate mount point uid/gid)
 MOUNTFILE_MOUNT_UID=48
