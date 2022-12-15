@@ -114,7 +114,6 @@ RUN \
 
 # Configure
 RUN \
-  mkdir /root/.ssh && \
   echo "Host *\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config && \
   sed -i -e '/^session.save_/ s/^/;/' /etc/php/8.1/*/php.ini && \
   touch /etc/php/8.1/mods-available/auto.ini && \
