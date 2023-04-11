@@ -23,3 +23,9 @@ bash: ## Runs bash in the container
 
 run: ## Runs the container with test data
 	docker run --rm -it -p 8000:8000 -v $(shell pwd)/test:/srv/remote --name $(NAME) $(IMAGE_NAME):$(TAG)
+
+_ci_test:
+	true
+
+_ci_version:
+	@echo $(TAG)
