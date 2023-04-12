@@ -29,34 +29,6 @@ jobs:
         run: |
           sed -E -e 's/docker-//' -e 's/^/image_name=/' <<<"${{ github.repository }}" >> "$GITHUB_OUTPUT"
 
-      - name: Get image version(s)
-        id: image_version
-        # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
-        run: |
-          cd ${{ matrix.version }}
-          delimiter="$(openssl rand -hex 8)"
-          echo "image_version<<${delimiter}" >> "${GITHUB_OUTPUT}"
-          make _ci_version >> "${GITHUB_OUTPUT}"
-          echo "${delimiter}" >> "${GITHUB_OUTPUT}"
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          # list of Docker images to use as base name for tags
-          images: |
-            quay.io/${{ steps.image_name.outputs.image_name }}
-            public.ecr.aws/${{ steps.image_name.outputs.image_name }}
-          # generate Docker tags based on the following events/attributes
-          tags: |
-            ${{ steps.image_version.outputs.image_version }}
-            # type=schedule
-            # type=ref,event=branch
-            # type=ref,event=pr
-            # type=semver,pattern={{version}}
-            # type=semver,pattern={{major}}.{{minor}}
-            # type=sha
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -66,6 +38,7 @@ jobs:
 
       # The values provided to these two AWS steps are always the same for Panubo owned repos
       - name: Configure AWS Credentials
+        if: github.event_name != 'pull_request'
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           role-to-assume: ${{ env.GITHUB_ROLE_ARN }}
@@ -103,6 +76,34 @@ jobs:
         run: |
           cd ${{ matrix.version }}
           make _ci_test
+
+      - name: Get image version(s)
+        id: image_version
+        # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+        run: |
+          cd ${{ matrix.version }}
+          delimiter="$(openssl rand -hex 8)"
+          echo "image_version<<${delimiter}" >> "${GITHUB_OUTPUT}"
+          make _ci_version TAG=test >> "${GITHUB_OUTPUT}"
+          echo "${delimiter}" >> "${GITHUB_OUTPUT}"
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            quay.io/${{ steps.image_name.outputs.image_name }}
+            public.ecr.aws/${{ steps.image_name.outputs.image_name }}
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            ${{ steps.image_version.outputs.image_version }}
+            # type=schedule
+            # type=ref,event=branch
+            # type=ref,event=pr
+            # type=semver,pattern={{version}}
+            # type=semver,pattern={{major}}.{{minor}}
+            # type=sha
 
       - name: Build and Push
         uses: docker/build-push-action@v3
