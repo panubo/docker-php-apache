@@ -84,7 +84,7 @@ jobs:
           cd ${{ matrix.version }}
           delimiter="$(openssl rand -hex 8)"
           echo "image_version<<${delimiter}" >> "${GITHUB_OUTPUT}"
-          make _ci_version TAG=test >> "${GITHUB_OUTPUT}"
+          make _ci_version >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
 
       - name: Docker meta
