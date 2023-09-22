@@ -8,8 +8,8 @@ These images are available from the [Docker Hub](https://hub.docker.com/r/panubo
 
 ## Production Images
 
-- [Debian 10 (Buster) Base](/debian10) - Recommended for PHP applications that support PHP 7.3
 - [Debian 11 (Bullseye) Base](/debian11) - Recommended for PHP applications that support PHP 7.4
+- [Debian 12 (Bookworm) Base](/debian12) - Recommended for PHP applications that support PHP 8.2
 
 ## Development Images
 
@@ -18,6 +18,7 @@ These images are available from the [Docker Hub](https://hub.docker.com/r/panubo
 
 ## Legacy
 
+- [Debian 10 (Buster) Base](/debian10) - For legacy PHP applications that support PHP 7.3
 - [Debian 9 (Stretch) Base](/debian9) - For legacy PHP applications that support PHP 7.0
 - [CentOS 7 Base](/centos7) - For legacy PHP applications that require PHP 5.4
 
