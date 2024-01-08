@@ -1,6 +1,6 @@
 # Panubo PHP-Apache
 #
-# Debian bookworm
+# Debian 12
 # PHP 8.2
 # Apache 2.4
 # Mongo support
