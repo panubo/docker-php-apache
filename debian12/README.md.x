@@ -1,8 +1,8 @@
-# PHP-Apache Debian 12 (Bookworm)
+# PHP-Apache Debian 12
 
 This is an Apache and php-fpm image:
 
-- Base: Debian 12 (Bookworm)
+- Base: Debian 12
 - Apache httpd: 2.4
 - PHP: 8.2
 
