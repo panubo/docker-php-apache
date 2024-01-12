@@ -55,12 +55,6 @@ RUN set -x \
   && rm -f /tmp/* \
   ;
 
-# Install s6
-RUN set -x \
-  && apt-get update \
-  && apt-get install -y --no-install-recommends s6 \
-  ;
-
 # Install PHP Extras
 RUN set -x \
   && if ! command -v wget > /dev/null; then \
@@ -84,7 +78,7 @@ RUN set -x \
 RUN \
   export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
-  apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates git gnupg openssh-client msmtp-mta apache2 libapache2-mod-xsendfile imagemagick ghostscript \
+  apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates git gnupg openssh-client msmtp-mta apache2 libapache2-mod-xsendfile imagemagick ghostscript s6 \
   php8.2-apcu \
   php8.2-cli \
   php8.2-curl \
