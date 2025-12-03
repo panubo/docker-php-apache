@@ -19,12 +19,12 @@ jobs:
   build_and_push:
     strategy:
       matrix:
-        version: ["debian12", "debian11"]
+        version: ["debian13", "debian12", "debian11"]
 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Get repo name
         id: image_name

@@ -10,6 +10,7 @@ These images are available from the [Docker Hub](https://hub.docker.com/r/panubo
 
 - [Debian 11 (Bullseye) Base](/debian11) - Recommended for PHP applications that require PHP 7.4
 - [Debian 12 (Bookworm) Base](/debian12) - Recommended for PHP applications that require PHP 8.2
+- [Debian 13 (Trixie) Base](/debian13) - Recommended for PHP applications that require PHP 8.4
 
 ## Development Images
 

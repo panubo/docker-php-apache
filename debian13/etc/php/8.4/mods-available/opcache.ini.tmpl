@@ -1,0 +1,10 @@
+; configuration for php opcache module
+; priority=10
+{{ $false := coll.Slice "none" "off" "0" }}
+{{- if (has $false (getenv "php_cache")) -}}
+; php cache is turned off by environment variable php_cache={{ getenv "php_cache" "" }}
+{{- else -}}
+zend_extension=opcache.so
+opcache.memory_consumption={{ getenv "php_opcache_memory_consumption" "128" }}
+opcache.revalidate_freq={{ getenv "php_opcache_revalidate_freq" "2" }}
+{{- end -}}
