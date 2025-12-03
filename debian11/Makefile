@@ -2,13 +2,19 @@ NAME = php-apache
 TAG = $(shell basename $(shell pwd))
 IMAGE_NAME := panubo/$(NAME)
 
-.PHONY: help build push clean bash run
+.PHONY: help build buildarm buildamd push clean bash run
 
 help:
 	@printf "$$(grep -hE '^\S+:.*##' $(MAKEFILE_LIST) | sed -e 's/:.*##\s*/:/' -e 's/^\(.\+\):\(.*\)/\\x1b[36m\1\\x1b[m:\2/' | column -c2 -t -s :)\n"
 
-build: ## Builds docker image
+build:  ## build image
 	docker build --pull -t $(IMAGE_NAME):$(TAG) .
+
+buildarm:  ## build image
+	docker build --platform=linux/arm64 --pull -t $(IMAGE_NAME):$(TAG) .
+
+buildamd:  ## build image
+	docker build --platform=linux/amd64 --pull -t $(IMAGE_NAME):$(TAG) .
 
 push: ## Push image to registry
 	docker tag $(IMAGE_NAME):$(TAG) docker.io/$(IMAGE_NAME):latest
