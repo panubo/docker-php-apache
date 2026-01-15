@@ -1,1 +1,0 @@
-s6: /usr/local/bin/s6-svscan /etc/s6

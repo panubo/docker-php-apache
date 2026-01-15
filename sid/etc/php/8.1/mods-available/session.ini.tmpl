@@ -1,4 +1,0 @@
-{{ if getenv "php_session_save_handler" -}}
-session.save_handler = {{ getenv "php_session_save_handler" "" }}
-session.save_path = "{{ getenv "php_session_save_path" "" }}"
-{{- end -}}

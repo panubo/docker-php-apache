@@ -1,4 +1,4 @@
-SUBDIRS := centos7 centos7-develop debian9 debian10 debian11 debian12 debian13 sid
+SUBDIRS := centos7 debian9 debian10 debian11 debian12 debian13
 
 .PHONY: build push clean
 
