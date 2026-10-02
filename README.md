@@ -31,10 +31,10 @@ These images are available from:
 
 - **[Debian 13 (Trixie) Base](/debian13)** - Recommended for PHP applications that require PHP 8.4.
 - **[Debian 12 (Bookworm) Base](/debian12)** - Recommended for PHP applications that require PHP 8.2.
-- **[Debian 11 (Bullseye) Base](/debian11)** - For applications that require PHP 7.4.
 
 ### Legacy Images
 
+- **[Debian 11 (Bullseye) Base](/debian11)** - For applications that require PHP 7.4.
 - **[Debian 10 (Buster) Base](/debian10)** - For legacy PHP applications that require PHP 7.3.
 - **[Debian 9 (Stretch) Base](/debian9)** - For legacy PHP applications that require PHP 7.0.
 - **[CentOS 7 Base](/centos7)** - For legacy PHP applications that require PHP 5.4.
