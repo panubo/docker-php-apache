@@ -34,7 +34,7 @@ These images are available from:
 
 ### Legacy Images
 
-- **[Debian 11 (Bullseye) Base](/debian11)** - For applications that require PHP 7.4.
+- **[Debian 11 (Bullseye) Base](/debian11)** - For legacy PHP applications that require PHP 7.4.
 - **[Debian 10 (Buster) Base](/debian10)** - For legacy PHP applications that require PHP 7.3.
 - **[Debian 9 (Stretch) Base](/debian9)** - For legacy PHP applications that require PHP 7.0.
 - **[CentOS 7 Base](/centos7)** - For legacy PHP applications that require PHP 5.4.
