@@ -7,6 +7,13 @@ on:
   pull_request:
   schedule:
     - cron: "0 0 * * 0" # Rebuild images from main branch every Sunday
+  workflow_dispatch:
+    inputs:
+      targets:
+        description: 'Build targets (JSON array)'
+        type: string
+        default: '["debian13", "debian12"]'
+        required: false
 
 env:
   GITHUB_ROLE_ARN: arn:aws:iam::461800378586:role/GitHubECRPublic
@@ -19,7 +26,7 @@ jobs:
   build_and_push:
     strategy:
       matrix:
-        version: ["debian13", "debian12"]
+        version: ${{ fromJSON(inputs.targets || '["debian13", "debian12"]') }}
 
     runs-on: ubuntu-latest
     steps:
