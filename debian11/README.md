@@ -4,7 +4,7 @@ This is an Apache and php-fpm image:
 
 - Base: Debian 11 (Bullseye)
 - Apache httpd: 2.4
-- PHP: 7.4
+- PHP: 7.4 (via [deb.sury.org](https://deb.sury.org/))
 
 This image is designed to be quite configurable and as such is good for getting
 started but probably not a great base if you want a highly optimised container.
