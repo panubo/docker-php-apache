@@ -18,6 +18,12 @@ RUN \
   usermod -u 48 www-data && \
   groupmod -g 48 www-data
 
+# Update apt sources to use archive.debian.org for EOL Debian 11
+RUN set -x \
+  && echo 'deb http://archive.debian.org/debian bullseye main' > /etc/apt/sources.list \
+  && echo 'deb http://archive.debian.org/debian-security bullseye-security main' >> /etc/apt/sources.list \
+  ;
+
 # Install bash-container functions
 RUN set -x \
   && if ! command -v wget > /dev/null; then \
@@ -78,7 +84,11 @@ RUN set -x \
 RUN \
   export DEBIAN_FRONTEND=noninteractive && \
   apt-get update && \
-  apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates git gnupg openssh-client msmtp-mta apache2 libapache2-mod-xsendfile imagemagick ghostscript s6 \
+  apt-get install --no-install-recommends --no-install-suggests -y wget curl ca-certificates gnupg && \
+  curl -sS https://packages.sury.org/php/apt.gpg | gpg --dearmor -o /usr/share/keyrings/sury-php.gpg && \
+  echo "deb [signed-by=/usr/share/keyrings/sury-php.gpg] https://packages.sury.org/php/ bullseye main" > /etc/apt/sources.list.d/php.list && \
+  apt-get update && \
+  apt-get install --no-install-recommends --no-install-suggests -y git openssh-client msmtp-mta apache2 libapache2-mod-xsendfile imagemagick ghostscript s6 \
   php7.4-apcu \
   php7.4-cli \
   php7.4-curl \

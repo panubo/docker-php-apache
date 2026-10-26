@@ -17,7 +17,7 @@ These images are available from:
 
 ## Features
 
-- **Multiple PHP Versions:** Support for a wide range of PHP versions, from modern PHP 8.x to legacy PHP 5.4.
+- **Multiple PHP Versions:** Support for a wide range of PHP versions, from modern PHP 8.x to legacy PHP 5.4. Uses the [deb.sury.org](https://deb.sury.org/) repository for up-to-date PHP packages on Legacy Debian images.
 - **Apache 2.4:** Comes with Apache 2.4 pre-configured to work with PHP-FPM.
 - **Process Management:** Uses `s6` for process supervision, ensuring that both Apache and PHP-FPM are always running.
 - **Configuration Templating:** Uses `gomplate` to allow for dynamic configuration of Apache, PHP, and other services using environment variables.
@@ -35,6 +35,11 @@ These images are available from:
 ### Legacy Images
 
 - **[Debian 11 (Bullseye) Base](/debian11)** - For legacy PHP applications that require PHP 7.4.
+
+## Obsolete Images
+
+These are no longer built.
+
 - **[Debian 10 (Buster) Base](/debian10)** - For legacy PHP applications that require PHP 7.3.
 - **[Debian 9 (Stretch) Base](/debian9)** - For legacy PHP applications that require PHP 7.0.
 - **[CentOS 7 Base](/centos7)** - For legacy PHP applications that require PHP 5.4.
