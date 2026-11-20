@@ -32,14 +32,11 @@ These images are available from:
 - **[Debian 13 (Trixie) Base](/debian13)** - Recommended for PHP applications that require PHP 8.4.
 - **[Debian 12 (Bookworm) Base](/debian12)** - Recommended for PHP applications that require PHP 8.2.
 
-### Legacy Images
-
-- **[Debian 11 (Bullseye) Base](/debian11)** - For legacy PHP applications that require PHP 7.4.
-
 ## Obsolete Images
 
-These are no longer built.
+These are no longer built. The source remains in the repository for reference, but no images are published.
 
+- **[Debian 11 (Bullseye) Base](/debian11)** - **Deprecated.** For legacy PHP applications that require PHP 7.4. No longer built: Debian 11 is EOL and the [deb.sury.org](https://deb.sury.org/) PHP 7.4 packages for Bullseye are no longer available. The last published image (`panubo/php-apache:debian11`, PHP 7.4.33) remains in the registry but receives no further updates.
 - **[Debian 10 (Buster) Base](/debian10)** - For legacy PHP applications that require PHP 7.3.
 - **[Debian 9 (Stretch) Base](/debian9)** - For legacy PHP applications that require PHP 7.0.
 - **[CentOS 7 Base](/centos7)** - For legacy PHP applications that require PHP 5.4.
